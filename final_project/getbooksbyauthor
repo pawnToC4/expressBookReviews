@@ -1,0 +1,6 @@
+$ curl localhost:5000/author/ChinuaAche
+[{"1":{"author":"Chinua Achebe","title":"Things Fall Apart","reviews":{}}}]
+$ curl localhost:5000/author/C
+[{"1":{"author":"Chinua Achebe","title":"Things Fall Apart","reviews":{}}},{"2":{"author":"Hans Christian Andersen","title":"Fairy tales","reviews":{}}},{"9":{"author":"Honoré de Balzac","title":"Le Père Goriot","reviews":{}}},{"10":{"author":"Samuel Beckett","title":"Molloy, Malone Dies, The Unnamable, the trilogy","reviews":{}}}]
+$ curl localhost:5000/author/32
+ERR: No books found for 32.

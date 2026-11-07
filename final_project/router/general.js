@@ -35,10 +35,28 @@ public_users.get('/isbn/:isbn',function (req, res) {
   }
  });
   
+//Task 3
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const author = req.params.author;
+  const authorBooks = [];
+  for (const [key, value] of Object.entries(books)){
+    const valueAuthor = value.author.replaceAll(/ /g, "");
+    //DEV NOTE:Using user input as a RegExp w/o performing necessary escapes can be a security threat. 
+    const authorRE = new RegExp(author, "i");
+    if( authorRE.test(valueAuthor) ){
+      let obj = {};
+      obj[key] = value;
+      authorBooks.push(obj);
+    }
+  }
+  if(authorBooks.length > 0){
+    return res.send(authorBooks);
+  }else{
+    return res.status(404).send(`ERR: No books found for ${author}.`);
+  }
+  
 });
 
 // Get all books based on title
