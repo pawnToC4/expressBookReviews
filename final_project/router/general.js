@@ -4,10 +4,22 @@ let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
-
+//Task 6
 public_users.post("/register", (req,res) => {
+  console.log("beep");
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const {username, password} = req.body;
+  if( !username ) return res.status(400).send("ERR: Username not provided.")
+  const existingUser = users.find( (x) => x.username === username);
+  if( existingUser ){
+    return res.status(400).send(`ERR: Username "${username}" already exists.`)
+  }else{
+    if( !password ) return res.status(400).send("ERR: Password not provided.")
+    users.push( {username:username, password:password} );
+    console.log(users);
+    return res.send(`Registered user "${username}".`);
+  }
+
 });
 
 //Task 1
@@ -81,10 +93,22 @@ public_users.get('/title/:title',function (req, res) {
   }
 });
 
+//Task 5
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  const isbnValue = parseInt(isbn);
+  if( isbnValue && isbnValue > 0 ){
+    if( Object.keys(books).includes(isbn)){
+      const review = books[isbnValue].review ? books[isbnValue].review : "none";
+      return res.send(`Reviews for ${books[isbnValue].title}: ${review}`);
+    } else{
+      return res.status(404).send(`ERR: ISBN ${isbn} not found.`);
+    }
+  } else{
+    return res.status(400).send(`ERR: Invalid ISBN.`)
+  }
 });
 
 module.exports.general = public_users;
