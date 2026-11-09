@@ -6,17 +6,14 @@ const public_users = express.Router();
 
 //Task 6
 public_users.post("/register", (req,res) => {
-  console.log("beep");
   //Write your code here
   const {username, password} = req.body;
   if( !username ) return res.status(400).send("ERR: Username not provided.")
-  const existingUser = users.find( (x) => x.username === username);
-  if( existingUser ){
+  if( isValid(username) ){
     return res.status(400).send(`ERR: Username "${username}" already exists.`)
   }else{
     if( !password ) return res.status(400).send("ERR: Password not provided.")
     users.push( {username:username, password:password} );
-    console.log(users);
     return res.send(`Registered user "${username}".`);
   }
 
