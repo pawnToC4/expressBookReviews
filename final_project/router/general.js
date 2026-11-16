@@ -22,9 +22,18 @@ public_users.post("/register", (req,res) => {
 //Task 1
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
+  let myPromise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(JSON.stringify(books));
+    }, 1000)
+  });
   //Write your code here
-  res.send(JSON.stringify(books))
-  return res.status(200).json({message: "Returned Book listing."});
+  
+  myPromise.then((bookStr) => {
+    res.write(bookStr);
+    res.end();
+  });
+  res.write("Gathering book listings...\n");
 });
 
 //Task 2
