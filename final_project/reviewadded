@@ -1,0 +1,29 @@
+$ curl -X POST localhost:5000/register/ -H "Content-Type: application/json"  -d '{"username":"username", "password":"password"}'
+Registered user "username".
+$ curl -X POST localhost:5000/register/ -H "Content-Type: application/json"  -d '{"username":"username2", "password":"password2"}'
+Registered user "username2".
+$ curl -X PUT localhost:5000/customer/auth/review/1?review=book -H "Content-Type: application/json"  -b cookies.txt
+{"message":"ERR: User not logged in."}
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"username", "password":"password"}' -c cookies.txt
+username logged in successfully.
+$ curl -X PUT localhost:5000/customer/auth/review/-1 -H "Content-Type: application/json"  -b cookies.txt
+ERR: Invalid ISBN
+$ curl -X PUT localhost:5000/customer/auth/review/20 -H "Content-Type: application/json"  -b cookies.txt
+ERR: No review provided.
+$ curl -X PUT localhost:5000/customer/auth/review/20?review=Book -H "Content-Type: application/json"  -b cookies.txt
+ERR: Book associated with 20 not found
+$ curl -X PUT localhost:5000/customer/auth/review/1?review=Book -H "Content-Type: application/json"  -b cookies.txt
+{"user":"username","review":"Book"}
+$ curl -X GET localhost:5000/review/1 -H "Content-Type: application/json"  -b cookies.txt
+Reviews for Things Fall Apart: {"username":"Book"}
+$ curl -X PUT localhost:5000/customer/auth/review/1?review=Koob -H "Content-Type: application/json"  -b cookies.txt
+{"user":"username","review":"Koob"}
+$ curl -X GET localhost:5000/review/1 -H "Content-Type: application/json"  -b cookies.txt
+Reviews for Things Fall Apart: {"username":"Koob"}
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"username2", "password":"password2"}' -c co
+okies.txt
+username2 logged in successfully.
+$ curl -X PUT localhost:5000/customer/auth/review/1?review=Book -H "Content-Type: application/json"  -b cookies.txt
+{"user":"username2","review":"Book"}
+$ curl -X GET localhost:5000/review/1 -H "Content-Type: application/json"  -b cookies.txt
+Reviews for Things Fall Apart: {"username":"Koob","username2":"Book"}

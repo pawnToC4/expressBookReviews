@@ -98,8 +98,8 @@ public_users.get('/review/:isbn',function (req, res) {
   const isbnValue = parseInt(isbn);
   if( isbnValue && isbnValue > 0 ){
     if( Object.keys(books).includes(isbn)){
-      const review = books[isbnValue].review ? books[isbnValue].review : "none";
-      return res.send(`Reviews for ${books[isbnValue].title}: ${review}`);
+      const review = books[isbnValue].reviews ? books[isbnValue].reviews : "none";
+      return res.send(`Reviews for ${books[isbnValue].title}: ${JSON.stringify(review)}`);
     } else{
       return res.status(404).send(`ERR: ISBN ${isbn} not found.`);
     }
