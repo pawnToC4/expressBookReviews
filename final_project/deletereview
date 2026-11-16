@@ -1,0 +1,21 @@
+$ curl -X POST localhost:5000/register/ -H "Content-Type: application/json"  -d '{"username":"username", "password":"password"}'
+ERR: Username "username" already exists.
+$ curl -X POST localhost:5000/register/ -H "Content-Type: application/json"  -d '{"username":"username2", "password":"password2"}'
+Registered user "username2".
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"username", "password":"password"}' -c cookies.txt
+username logged in successfully.
+$ curl -X PUT localhost:5000/customer/auth/review/1?review=Book -H "Content-Type: application/json"  -b cookies.txt
+{"user":"username","review":"Book"}
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"username2", "password":"password2"}' -c co
+okies.txt
+username2 logged in successfully.
+$ curl -X PUT localhost:5000/customer/auth/review/1?review=Book2 -H "Content-Type: application/json"  -b cookies.txt
+{"user":"username2","review":"Book2"}
+$ curl -X GET localhost:5000/review/1 -H "Content-Type: application/json"  -b cookies.txt
+Reviews for Things Fall Apart: {"username":"Book","username2":"Book2"}
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"username", "password":"password"}' -c cookies.txt
+username logged in successfully.
+$ curl -X DELETE localhost:5000/customer/auth/review/1 -H "Content-Type: application/json"  -b cookies.txt
+Deleting review...
+$ curl -X GET localhost:5000/review/1 -H "Content-Type: application/json"  -b cookies.txt
+Reviews for Things Fall Apart: {"username2":"Book2"}

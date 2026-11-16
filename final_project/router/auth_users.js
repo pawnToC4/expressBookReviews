@@ -55,6 +55,22 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   }
 });
 
+//Task 9
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const isbn = parseInt(req.params.isbn);
+  const username = req.session.authorization.username;
+  if(!username) return res.status(401).send("ERR: You must login to gain access.");
+  if( isbn && isbn > 0 ){
+    if(!books[isbn].reviews[username]) return res.status(404).send(`ERR: No review associated with ${username}.`);
+    console.log(`Deleting {${username} : ${books[isbn].reviews[username]}...`);
+    res.send(`Deleting review...`)
+    delete books[isbn].reviews[username];
+  } else{ 
+    return res.status(400).send("ERR: Invalid ISBN")
+  }
+  
+});
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
