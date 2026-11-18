@@ -19,9 +19,10 @@ public_users.post("/register", (req,res) => {
 
 });
 
-//Task 1
+//Task 1 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
+  //Task 10
   let myPromise = new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve(JSON.stringify(books));
@@ -36,21 +37,42 @@ public_users.get('/',function (req, res) {
   res.write("Gathering book listings...\n");
 });
 
+class AppError extends Error {
+  constructor(message, statusCode){
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
 //Task 2
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  const isbn = parseInt(req.params.isbn);
-  if( isbn && isbn > 0){
-    console.log(Object.keys(books));
-    if( Object.keys(books).includes(`${isbn}`)){
-      res.send(JSON.stringify(books[`${isbn}`]));
-    }else{
-      res.status(404).send("ERR: ISBN not found.");
-    }
-  }else{
-    res.status(400).send("ERR: Invalid ISBN")
-  }
+  //Task 11
+  let myPromise = new Promise((resolve, reject) => {
+    setTimeout( () => {
+      const isbn = parseInt(req.params.isbn);
+      if( isbn && isbn > 0){
+        if( Object.keys(books).includes(`${isbn}`)){
+          resolve(JSON.stringify(books[`${isbn}`]));
+        }else{
+          reject( new AppError("ERR: ISBN not found.",404));
+        }
+      }else{
+        reject( new AppError("ERR: Invalid ISBN", 400));
+      }
+    }, 1000);
+  });
+
+  myPromise.then( (book) => {
+    res.write(book);
+    res.end();
+  }).catch((e)=>{
+    res.status(e.statusCode).write(e.message);
+    res.end();
+  });
+
+  res.write("Looking for book...\n");
  });
   
 //Task 3
