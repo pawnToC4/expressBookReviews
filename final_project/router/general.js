@@ -80,23 +80,37 @@ public_users.get('/isbn/:isbn',function (req, res) {
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
   const author = req.params.author;
-  const authorBooks = [];
-  for (const [key, value] of Object.entries(books)){
-    const valueAuthor = value.author.replaceAll(/ /g, "");
-    //DEV NOTE:Using user input as a RegExp w/o performing necessary escapes can be a security threat. 
-    const authorRE = new RegExp(author, "i");
-    if( authorRE.test(valueAuthor) ){
-      let obj = {};
-      obj[key] = value;
-      authorBooks.push(obj);
-    }
-  }
-  if(authorBooks.length > 0){
-    return res.send(authorBooks);
-  }else{
-    return res.status(404).send(`ERR: No books found for ${author}.`);
-  }
+  //Task 12
+  let myPromise = new Promise((resolve, reject) => {
+    setTimeout( ()=> {
+      const authorBooks = [];
+      for (const [key, value] of Object.entries(books)){
+        const valueAuthor = value.author.replaceAll(/ /g, "");
+        //DEV NOTE:Using user input as a RegExp w/o performing necessary escapes can be a security threat. 
+        const authorRE = new RegExp(author, "i");
+        if( authorRE.test(valueAuthor) ){
+          let obj = {};
+          obj[key] = value;
+          authorBooks.push(obj);
+        }
+      }
+      if(authorBooks.length > 0){
+        return resolve(JSON.stringify(authorBooks));
+      }else{
+        return reject(new AppError(`ERR: No books found for ${author}.`, 404));
+      }
+    }, 1000)
+  });
   
+  myPromise.then( (authorBooks) => {
+    res.write(authorBooks);
+    res.end();
+  }).catch( (e) => {
+    res.status(e.statusCode).write(e.message);
+    res.end();
+  });
+
+  res.write(`Looking for books by ${author}...\n`)
 });
 
 //Task 4
