@@ -118,21 +118,36 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const title = req.params.title;
-  const titles = [];
-  for( const [key, value] of Object.entries(books)){
-    const valueTitle = value.title.replaceAll(/ /g, "");
-    const titleRE = new RegExp(title, "i");
-    if( titleRE.test(valueTitle) ){
-      let obj = {};
-      obj[key] = value;
-      titles.push(obj);
-    }
-  }
-  if( titles.length > 0 ){
-    return res.send(titles);
-  }else{
-    return res.status(404).send(`ERR: No titles found for ${title}.`);
-  }
+  //Task 13
+  let myPromise = new Promise( (resolve, reject)=> {
+    setTimeout( () => {
+      const titles = [];
+      for( const [key, value] of Object.entries(books)){
+        const valueTitle = value.title.replaceAll(/ /g, "");
+        const titleRE = new RegExp(title, "i");
+        if( titleRE.test(valueTitle) ){
+          let obj = {};
+          obj[key] = value;
+          titles.push(obj);
+        }
+      }
+      if( titles.length > 0 ){
+        return resolve(JSON.stringify(titles));
+      }else{
+        return reject(new AppError(`ERR: No titles found for ${title}.`, 404));
+      }
+    }, 1000);
+  });
+
+  myPromise.then( (titles) => {
+    res.write(titles);
+    res.end();
+  }).catch( (e) => {
+    res.status(e.statusCode).write(e.message);
+    res.end();
+  });
+
+  res.write(`Looking for books with title: ${title}...\n`);
 });
 
 //Task 5
