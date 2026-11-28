@@ -1,0 +1,8 @@
+$ curl localhost:5000/isbn/1
+{"author":"Chinua Achebe","title":"Things Fall Apart","reviews":{}}
+$ curl localhost:5000/isbn/a
+ERR: Invalid ISBN
+$ curl localhost:5000/isbn/-1
+ERR: Invalid ISBN
+$ curl localhost:5000/isbn/11
+ERR: ISBN not found.

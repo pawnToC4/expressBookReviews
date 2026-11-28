@@ -1,0 +1,6 @@
+$ curl localhost:5000/review/1
+Reviews for Things Fall Apart: none
+$ curl localhost:5000/review/a
+ERR: Invalid ISBN.
+$ curl localhost:5000/review/11
+ERR: ISBN 11 not found.

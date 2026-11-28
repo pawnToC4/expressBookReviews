@@ -1,0 +1,8 @@
+$ curl -X POST localhost:5000/register/ -H "Content-Type: application/json"  -d '{"username":"user", "password":""}'
+ERR: Password not provided.
+$ curl -X POST localhost:5000/register/ -H "Content-Type: application/json"  -d '{"username":"", "password":"password"}'
+ERR: Username not provided.
+$ curl -X POST localhost:5000/register/ -H "Content-Type: application/json"  -d '{"username":"username", "password":"password"}'
+Registered user "username".
+$ curl -X POST localhost:5000/register/ -H "Content-Type: application/json"  -d '{"username":"username", "password":"password1"}'
+ERR: Username "username" already exists.

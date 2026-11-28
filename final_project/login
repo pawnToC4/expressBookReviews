@@ -1,0 +1,13 @@
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"username", "password":""}' -c cookies.txt
+ERR: Missing Username or Password.
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"", "password":"password"}' -c cookies.txt
+ERR: Missing Username or Password.
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"username1", "password":"password"}' -c coo
+kies.txt
+Invalid login.
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"username", "password":"password1"}' -c coo
+kies.txt
+Invalid login.
+$ curl -X POST localhost:5000/customer/login -H "Content-Type: application/json"  -d '{"username":"username", "password":"password"}' -c cook
+ies.txt
+username logged in successfully.
